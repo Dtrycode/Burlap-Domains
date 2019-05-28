@@ -48,7 +48,7 @@ public class BWModel implements FullStateModel {
 		BlocksWorldBlock nsrc = src.copy();
 		nsrc.on = target.name;
 		BlocksWorldBlock ntarget = target.copy();
-		target.clear = false;
+		ntarget.clear = false; // bug, fixed
 
 		s.addObject(nsrc).addObject(ntarget);
 

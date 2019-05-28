@@ -126,4 +126,22 @@ public class BlocksWorldState implements MutableOOState{
 	public String toString() {
 		return OOStateUtilities.ooStateToString(this);
 	}
+
+	protected static class BlocksWorldTower {
+
+		String name;
+		int height;
+		BlocksWorldBlock top;
+
+		public BlocksWorldTower(String name) {
+			this.name = name;
+			this.height = 0;
+			this.top = null;
+		}
+
+		public BlocksWorldTower() {
+
+		}
+		
+	}
 }

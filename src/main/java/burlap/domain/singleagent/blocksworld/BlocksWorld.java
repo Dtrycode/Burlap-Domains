@@ -165,7 +165,14 @@ public class BlocksWorld implements DomainGenerator {
 		return s;
 	}
 
-	
+	/**
+	 * Creates a new state with nBlocks block objects in it.
+	 * @param nBlocks the number of block objects to create
+	 * @return a new state with nBlocks block objects
+	 */
+	public static State getRandomNewState(int nBlocks) {
+
+	}
 	
 	/**
 	 * Action class for stacking one block onto another. The both blocks must be clear for one to be stacked on the other.
