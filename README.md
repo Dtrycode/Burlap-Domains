@@ -1,5 +1,7 @@
 [![Snap CI branch](https://img.shields.io/snap-ci/ThoughtWorksStudios/eb_deployer/master.svg?maxAge=2592000)]() [![Maven Central](https://maven-badges.herokuapp.com/maven-central/edu.brown.cs.burlap/burlap/badge.svg)](https://maven-badges.herokuapp.com/maven-central/edu.brown.cs.burlap/burlap) [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)]() ![java6](https://img.shields.io/badge/java-6-blue.svg) ![java7](https://img.shields.io/badge/java-7-blue.svg) ![java8](https://img.shields.io/badge/java-8-blue.svg)
 
+This repository is modified from BURLAP.
+
 BURLAP
 ======
 
