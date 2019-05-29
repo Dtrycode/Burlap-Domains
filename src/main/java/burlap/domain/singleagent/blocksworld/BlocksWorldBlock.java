@@ -19,6 +19,7 @@ public class BlocksWorldBlock implements ObjectInstance {
 	public String on = TABLE_VAL;
 	public boolean clear = true;
 	public Color color = Color.red;
+	public BlocksWorldTower tower;
 
 	protected String name = "block";
 
@@ -38,6 +39,14 @@ public class BlocksWorldBlock implements ObjectInstance {
 		this.name = name;
 	}
 
+	public BlocksWorldBlock(String on, boolean clear, Color color, String name, BlocksWorldTower tower) {
+		this.on = on;
+		this.clear = clear;
+		this.color = color;
+		this.name = name;
+		this.tower = tower;
+	}
+
 	@Override
 	public String className() {
 		return CLASS_BLOCK;
@@ -50,7 +59,7 @@ public class BlocksWorldBlock implements ObjectInstance {
 
 	@Override
 	public ObjectInstance copyWithName(String objectName) {
-		return new BlocksWorldBlock(on, clear, color, objectName);
+		return new BlocksWorldBlock(on, clear, color, objectName, tower);
 	}
 
 	@Override
@@ -78,7 +87,7 @@ public class BlocksWorldBlock implements ObjectInstance {
 
 	@Override
 	public BlocksWorldBlock copy() {
-		return new BlocksWorldBlock(on, clear, color, name);
+		return new BlocksWorldBlock(on, clear, color, name, tower);
 	}
 
 	public String getName() {

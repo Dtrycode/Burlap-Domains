@@ -24,6 +24,7 @@ import static burlap.domain.singleagent.blocksworld.BlocksWorld.*;
 public class BlocksWorldState implements MutableOOState{
 
 	protected Map<String, BlocksWorldBlock> blocks = new HashMap<String, BlocksWorldBlock>();
+	protected List<BlocksWorldTower> towers = new ArrayList<BlocksWorldTower>();
 
 	public BlocksWorldState() {
 
@@ -33,6 +34,28 @@ public class BlocksWorldState implements MutableOOState{
 		this.blocks = blocks;
 	}
 
+	public BlocksWorldState(Map<String, BlocksWorldBlock> blocks, List<BlocksWorldTower> towers) {
+		this.blocks = blocks;
+		this.towers = towers;
+	}
+
+	public void addTower(BlocksWorldTower tower) {
+		this.towers.add(tower);
+	}
+
+	public BlocksWorldTower getTower(int ind) {
+		return this.towers.get(ind);
+	}
+
+	public List<BlocksWorldTower> getTowers() {
+		return this.towers;
+	}
+
+	// public void addBlockToTower(BlocksWorldBlock b, int ind) {
+	// 	BlocksWorldTower tower = this.towers.get(ind);
+	// 	tower.addBlockTop(b);
+	// 	b.tower = tower;
+	// }
 
 	@Override
 	public MutableOOState addObject(ObjectInstance o) {
@@ -119,7 +142,8 @@ public class BlocksWorldState implements MutableOOState{
 
 	@Override
 	public State copy() {
-		return new BlocksWorldState(new HashMap<String, BlocksWorldBlock>(blocks));
+		return new BlocksWorldState(new HashMap<String, BlocksWorldBlock>(blocks), 
+			new ArrayList<BlocksWorldTower>(towers));
 	}
 
 	@Override
@@ -127,21 +151,4 @@ public class BlocksWorldState implements MutableOOState{
 		return OOStateUtilities.ooStateToString(this);
 	}
 
-	protected static class BlocksWorldTower {
-
-		String name;
-		int height;
-		BlocksWorldBlock top;
-
-		public BlocksWorldTower(String name) {
-			this.name = name;
-			this.height = 0;
-			this.top = null;
-		}
-
-		public BlocksWorldTower() {
-
-		}
-		
-	}
 }

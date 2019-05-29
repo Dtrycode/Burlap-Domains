@@ -7,6 +7,7 @@ import burlap.mdp.core.oo.OODomain;
 import burlap.mdp.core.oo.ObjectParameterizedAction;
 import burlap.mdp.core.oo.propositional.PropositionalFunction;
 import burlap.mdp.core.oo.state.OOState;
+import burlap.mdp.core.oo.state.ObjectInstance;
 import burlap.mdp.core.state.State;
 import burlap.mdp.singleagent.model.RewardFunction;
 import burlap.mdp.singleagent.SADomain;
@@ -22,6 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This is a domain generator for the classic relational blocks world domain. There exists a single table and any number of blocks that can be stacked
@@ -48,6 +50,15 @@ public class BlocksWorld implements DomainGenerator {
 	 */
 	public static final String VAR_COLOR = "color";
 
+	/**
+	 * Constant for the numeric "height" variable key.
+	 */
+	public static final String VAR_HEIGHT = "height";
+
+	/**
+	 * Constant for the block "top" variable key.
+	 */
+	public static final String VAR_TOP = "top";
 
 	/**
 	 * Value for being on the table
@@ -60,6 +71,11 @@ public class BlocksWorld implements DomainGenerator {
 	 * Constant for the name of the block class.
 	 */
 	public static final String CLASS_BLOCK = "block";
+
+	/**
+	 * Constant for the name of the tower class.
+	 */
+	public static final String CLASS_TOWER = "tower";
 	
 	/**
 	 * Constant for the stack action name
@@ -168,10 +184,65 @@ public class BlocksWorld implements DomainGenerator {
 	/**
 	 * Creates a new state with nBlocks block objects in it.
 	 * @param nBlocks the number of block objects to create
-	 * @return a new state with nBlocks block objects
+	 * @param nTowers the number of tower objects to create
+	 * @return a new state with nBlocks block objects and nTowers tower objects
 	 */
-	public static State getRandomNewState(int nBlocks) {
+	public static State getRandomNewState(int nBlocks, int nTowers) {
+		BlocksWorldState s = new BlocksWorldState();
+		for (int i = 0; i < nTowers; i++) {
+			s.addTower(new BlocksWorldTower("tower" + i));
+		}
+		for (int i = 0; i < nBlocks; i++) {
+			s.addObject(new BlocksWorldBlock("block" + i));
+		}
+		List<ObjectInstance> blocks = s.objects();
 
+		Random rand = new Random();
+		// randomly select a block for each tower
+		for (int i = 0; i < nTowers; i++) {
+			int ind = rand.nextInt(blocks.size());
+			BlocksWorldTower tower = s.getTower(i);
+			tower.addBlockTop((BlocksWorldBlock) blocks.remove(ind));
+		}
+		// randomly assign the rest of blocks
+		for (int i = 0; i < blocks.size(); i++) {
+			int ind = rand.nextInt(nTowers);
+			BlocksWorldTower tower = s.getTower(ind);
+			BlocksWorldBlock topBlock = tower.getTopBlock();
+			BlocksWorldBlock block = (BlocksWorldBlock) blocks.get(i);
+			if (topBlock != null) {
+				BlocksWorldBlock src = block;
+				BlocksWorldBlock target = topBlock;
+
+				String srcOnName = src.on;
+
+				BlocksWorldBlock nsrc = src.copy();
+				nsrc.on = target.name;
+				BlocksWorldBlock ntarget = target.copy();
+				ntarget.clear = false;
+
+				s.addObject(nsrc).addObject(ntarget);
+
+				block = nsrc;
+				topBlock = ntarget;
+
+				tower.removeBlockTop();
+				tower.addBlockTop(topBlock);
+
+				if(!srcOnName.equals(TABLE_VAL)){
+					BlocksWorldBlock oldTarget = (BlocksWorldBlock)s.object(srcOnName).copy();
+					oldTarget.clear = true;
+
+					oldTarget.tower.removeBlockTop();
+					oldTarget.tower.addBlockTop(oldTarget);
+
+					s.addObject(oldTarget);
+				}
+
+			}
+			tower.addBlockTop(block);
+		}
+		return s;
 	}
 	
 	/**
